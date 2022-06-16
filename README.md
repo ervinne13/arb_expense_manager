@@ -24,13 +24,14 @@ Now once you run:
 
 ```
 docker compose up -d
-```
-
-or (if you're using an older version of docker)
-
-```
-docker-compose up -d
 docker exec -it expense-man-laravel php artisan key:generate
+```
+
+Note that this uses the latest docker compose plugin, notciable by using `docker compose` instead of `docker-compose` command. If you don't have it yet, just install it via:
+
+```
+sudo apt-get update
+sudo apt-get install docker-compose-plugin
 ```
 
 Then you can just access the application via the `NGINX_ALIAS` you set in the browser.
