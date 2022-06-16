@@ -1,0 +1,71 @@
+version: '3.2'
+
+services:
+  expense-man-db:
+    # So we know the IP of the containers with one docker ps
+    container_name: expense-man-db-${DB_IP}
+    # Keep this same as target prod. I like working with 5.7 as
+    # AWS RDS does not yet have the newer version
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    networks:
+      default:
+        ipv4_address: ${DB_IP}
+    volumes:
+      # if you're confused as to why, this just makes it so that even 
+      # if we do `docker compose down` the original database
+      # wont get deleted along with the container
+      - nbdi-db-vol:/var/lib/mysql
+  expense-man-laravel:
+    container_name: expense-man-laravel
+    build:
+      args:
+        user: arb_calls
+        uid: 1000
+      context: ./laravel_backend
+      dockerfile: Dockerfile
+    image: expense-man-laravel    
+    restart: unless-stopped
+    working_dir: /var/www/laravel
+    volumes:
+      - ./laravel_backend:/var/www/laravel
+    networks:
+      default:
+        aliases:
+          - expense-man-laravel
+    command: bash -c "php artisan serve --host 0.0.0.0 && npm run dev"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - expense-man-db
+  expense-man-nginx:
+    container_name: expense-man-nginx-${NGINX_IP}
+    image: expense-man-nginx:latest
+    build:
+      context: ./
+      dockerfile: ./nginx/Dockerfile
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/ssl
+    extra_hosts:
+      - "${NGINX_ALIAS}:${NGINX_IP}"
+    networks:
+      default:
+        ipv4_address: ${NGINX_IP}
+    tty: true
+    stdin_open: true
+    depends_on:
+      - expense-man-laravel
+networks:
+  # You might need to change this up if you're using an older 
+  # version of docker
+  # We use an external bridge network instead of writing one here to make the IPs configurable.
+  default:
+    name: ${BRIDGE_NETWORK}
+    external: true
+volumes:
+  nbdi-db-vol:
