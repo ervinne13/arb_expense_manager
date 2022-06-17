@@ -4,7 +4,9 @@ FROM php:7.4-fpm
 ARG user
 ARG uid
 
-# Install system dependencies
+# Notes: make sure to add other dependencies on this one line.
+# rebuilds will generally go faster this way as installations
+# wont run again when we change other commands.
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -12,31 +14,33 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    nodejs \
+    npm
 
-RUN apt-get install -y nodejs npm
-
-# Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN groupadd -g $uid $user
+RUN useradd -u $uid -ms /bin/bash -g $user $user
 
-# Create system user to run Composer and Artisan Commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
+COPY --chown=$user:$user . /var/www/laravel
+RUN chmod -R ug+w /var/www/laravel/storage
+# RUN chmod -R ug+w /var/www/laravel/.env
+# RUN chown $user:$user /var/www/laravel/.env
 
-# Set working directory
-WORKDIR /var/www
-
-RUN echo "alias ll='ls -alF'" >> ~/.bashrc
-RUN npm i
+WORKDIR /var/www/laravel
 
 USER $user
+
+RUN echo "alias ll='ls -alF'" >> ~/.bashrc
+RUN composer install --optimize-autoloader --no-dev
+RUN php artisan key:generate
+
+RUN npm i
+# RUN npm audit fix # This is preferred but let's disable for now, it's currently really slow
 
 EXPOSE 80
 EXPOSE 8000

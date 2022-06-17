@@ -24,15 +24,17 @@ services:
     container_name: expense-man-laravel
     build:
       args:
-        user: arb_calls
+        user: www
         uid: 1000
       context: ./laravel_backend
       dockerfile: Dockerfile
-    image: expense-man-laravel    
+    image: expense-man-laravel
     restart: unless-stopped
     working_dir: /var/www/laravel
     volumes:
       - ./laravel_backend:/var/www/laravel
+      - /var/www/laravel/vendor/
+      - /var/www/laravel/node_modules/
     networks:
       default:
         aliases:

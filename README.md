@@ -24,7 +24,6 @@ Now once you run:
 
 ```
 docker compose up -d
-docker exec -it expense-man-laravel php artisan key:generate
 ```
 
 Note that this uses the latest docker compose plugin, notciable by using `docker compose` instead of `docker-compose` command. If you don't have it yet, just install it via:
@@ -34,6 +33,8 @@ sudo apt-get update
 sudo apt-get install docker-compose-plugin
 ```
 
+The commands `composer install`, `npm i`, and `php artisan key:generate` are all automatically executed upon docker compose.
+
 Then you can just access the application via the `NGINX_ALIAS` you set in the browser.
 
 ## More Information
@@ -42,7 +43,7 @@ You should be good even without reading more, but if you're not familiar with ng
 
 ## Docker Setup
 
-Note that we do not expose the application ports, instead, we have nginx exposed and the reverse proxy is doing the routing inside the docker containers. We use IP aliases to access NGINX this way, hence the value you set in `NGINX_ALIAS` will be used as the address in the browser to access the application. Please allow insecure https as we only use self-signed certificates to simulate https. This will make it easier later on to add stuff like google authentication and anything that has dependency on whitelisting an address, plus it's closest to production behavior so we don't suddenly get errors that work on local but not in staging and prod.
+Note that we do not expose the application ports, instead, we have nginx exposed and the reverse proxy is doing the routing inside the docker containers. We use IP aliases to access NGINX this way, hence the value you set in `NGINX_ALIAS` will be used as the address in the browser to access the application. Please allow insecure https as we only use self-signed certificates to simulate https. This will make it easier later on to add stuff like google authentication and anything that has dependency on whitelisting an address, adding other services like elasticsearch, plus it's closest to production behavior so we don't suddenly get errors that work on local but not in staging and prod.
 
 ## The environment variables
 
@@ -60,3 +61,7 @@ The alias is the virtual host to be used to access the application in the browse
 ### `DB_X` Variables
 
 This is your usual database variables. Values here are the values you can use to access mysql via workbench or whichever database viewer you choose.
+
+### TODO
+
+https://www.npmjs.com/package/vue-dashboard-vd
