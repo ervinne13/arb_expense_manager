@@ -1,36 +1,42 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import auth from './auth'
-import UsersPage from '@/js/pages/UsersPage.vue'
-import LoginPage from '@/js/pages/LoginPage.vue'
+import HomePage from '@/js/pages/HomePage'
+import UsersPage from '@/js/pages/UsersPage'
+import LoginPage from '@/js/pages/LoginPage'
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        { path: '/login', name: 'login', component: LoginPage },
-        { path: '/users', name: 'users', component: UsersPage, requiresAuth: true },
+        { path: '/', name: 'home', component: HomePage, meta: { requiresAuth: true } },
+        { path: '/login', name: 'login', component: LoginPage, meta: { hideForAuth: true } },
+        { path: '/users', name: 'users', component: UsersPage, meta: { requiresAuth: true } },
     ]
 });
 
-router.beforeEach((to, from, next) => {
-    console.log('before each')
+router.beforeEach(async (to, from, next) => {
+    const user = await auth.getCurrentUser();
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        user = auth.check()
         if (user) {
-            this.user = user
+            console.log(`${user.name} is logged in`)
             next();
             return;
         } else {
+            console.log('routing to login')
             router.push('/login');
         }
-        // if (Auth.check()) {
-        //     next();
-        //     return;
-        // } else {
-        //     router.push('/login');
-        // }
+    } else {
+        next();
+    }
+
+    if (to.matched.some(record => record.meta.hideForAuth)) {
+        if (user) {
+            next({ path: '/' });
+        } else {
+            next();
+        }
     } else {
         next();
     }

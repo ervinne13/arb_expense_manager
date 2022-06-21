@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import Auth from "../auth.js";
+import auth from "../auth.js";
 
 export default {
   data() {
@@ -56,21 +56,10 @@ export default {
       const loginResp = await this.axios.post("/api/login", this.user);
 
       if (loginResp.status === 200) {
-        const user = await this.axios.get("/api/me");
+        const user = await auth.getCurrentUser();
         console.log(user);
+        this.$router.push("/");
       }
-
-      console.log(loginResp);
-
-      // this.axios
-      //   .post("/api/login", this.user)
-      //   .then(({ data }) => {
-      //     Auth.login(data.access_token, data.user); //set local storage
-      //     this.$router.push("/dashboard");
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
     },
     onReset(event) {
       event.preventDefault();

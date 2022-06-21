@@ -6,14 +6,14 @@ import axios from 'axios';
 // token like this (saved in local storage, resent as header).
 
 
-const check = async () => {
+const getCurrentUser = async () => {
     // No catch, let it fail
-    const res = await this.axios.get("/api/me");
+    const res = await axios.get("/api/me");
     return res.data
 }
 
 export default {
-    check
+    getCurrentUser
 }
 
 // class Auth {

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout']);
 
 // TODO: make 'middleware' => 'auth:api' work. Currently the Authorization 
 // is not set to ey... but instead the token directly which might be

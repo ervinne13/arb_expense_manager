@@ -1,33 +1,46 @@
 <template>
-  <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="collapse navbar-collapse">
-        <div class="navbar-nav" v-if="isUserLoggedIn">
-          <h5>Dashboard</h5>
-          <a href="javascript:void(0)" @click="logout()" class="nav-item nav-link ml-3"
-            >Logout</a
-          >
-        </div>
-        <div v-else>
-          <router-link to="/login">Login</router-link>
-        </div>
-      </div>
-    </nav>
-    <router-view> </router-view>
+  <div>
+    <div>
+      <b-navbar type="dark" variant="dark">
+        <b-navbar-nav>
+          <b-nav-item href="#">
+            <h3>Welcome {{ user.name }}</h3>
+          </b-nav-item>
+          <b-nav-item v-if="user.name" right>
+            <a href="javascript:void(0)" @click="logout()" class="nav-item nav-link ml-3"
+              >Logout</a
+            >
+          </b-nav-item>
+
+          <b-nav-item v-else right>
+            <a href="javascript:void(0)" @click="login()" class="nav-item nav-link ml-3"
+              >Login</a
+            >
+          </b-nav-item>
+        </b-navbar-nav>
+      </b-navbar>
+    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+import auth from "@/js/auth";
+
 export default {
   data() {
     return {
+      user: { name: "" },
       isUserLoggedIn: this.user,
     };
   },
   async mounted() {
-    this.user = await this.axios.get("/api/me");
+    this.user = await auth.getCurrentUser();
   },
   methods: {
+    login() {
+      this.$router.push("/login");
+    },
     async logout() {
       await this.axios.post("/api/logout");
       this.$router.push("/login");
