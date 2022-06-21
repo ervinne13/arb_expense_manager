@@ -28,15 +28,16 @@ RUN useradd -u $uid -ms /bin/bash -g $user $user
 
 COPY --chown=$user:$user . /var/www/laravel
 RUN chmod -R ug+w /var/www/laravel/storage
-# RUN chmod -R ug+w /var/www/laravel/.env
-# RUN chown $user:$user /var/www/laravel/.env
 
 WORKDIR /var/www/laravel
 
 USER $user
 
 RUN echo "alias ll='ls -alF'" >> ~/.bashrc
-RUN composer install --optimize-autoloader --no-dev
+# RUN composer install --optimize-autoloader --no-dev
+ # I'm having trouble with composer 2.x and i can't do --no-dev, for now, let's go with this:
+RUN composer install
+RUN composer dump-autoload
 RUN php artisan key:generate
 
 RUN npm i
