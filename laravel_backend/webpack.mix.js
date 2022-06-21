@@ -1,23 +1,12 @@
 const mix = require('laravel-mix');
 
-mix.options({
-    hmrOptions: {
-        host: 'localhost',
-        port: '8079'
-    },
-});
-
-
 mix.webpackConfig({
     resolve: {
         extensions: ['.js', '.vue'],
         alias: {
             '@': __dirname + '/resources'
         }
-    },
-    devServer: {
-        port: '8079'
-    },
+    }
 });
 
 /*

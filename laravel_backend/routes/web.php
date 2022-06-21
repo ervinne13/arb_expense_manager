@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\SinglePageController;
+use App\Http\Controllers\AppSPAController;
+use App\Http\Controllers\AuthSPAController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+// Route::group(['middleware' => ['guest']], function () {
+    
+// });
+Route::get('/login', [AppSPAController::class, 'index'])->name('login');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/{any}', [AppSPAController::class, 'index'])->where('any', '.*');
+});
 
-Route::get('/{any}', [SinglePageController::class, 'index'])->where('any', '.*');

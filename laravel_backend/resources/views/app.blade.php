@@ -15,14 +15,15 @@
             font-family: 'Nunito', sans-serif;
         }
     </style>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet"></link>    
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    </link>
 </head>
 
 <body class="antialiased">
-    <div id="app"></div>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <div>
+        <div id="app"></div>
+        <script src="{{ asset('js/app.js') }}"></script>
+    </div>
 </body>
 
 </html>
