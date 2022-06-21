@@ -62,6 +62,22 @@ The alias is the virtual host to be used to access the application in the browse
 
 This is your usual database variables. Values here are the values you can use to access mysql via workbench or whichever database viewer you choose.
 
+## Debugging
+
+### Logs
+
+Notice `.env.tmpl` and the created `.env`. I used stderr instead of stack as a log channel so that it's actually easier to live monitor logs as we develop. Simply run:
+
+```
+docker logs -f expense-man-laravel
+```
+
+to display the logs in real time.
+
+### Laravel ENV
+
+On the topic of `.env`, the file was automatically created when you run `firstrun.sh`.
+
 ### TODO
 
 https://www.npmjs.com/package/vue-dashboard-vd
