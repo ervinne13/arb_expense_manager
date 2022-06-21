@@ -24,6 +24,8 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "vue-dashboard-vd": "^2.0.4"
+        "bootstrap-vue": "^2.22.0",
+        "vue-dashboard-vd": "^2.0.4",
+        "vue-router": "^3.5.4"
     }
 }
