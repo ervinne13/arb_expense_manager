@@ -64,6 +64,17 @@ Client secret: somegibberishhere
 
 Make sure to take Client id 2 or whichever is the password grant client based on the name.
 
+You also need to refresh the frontend if you're not doing an npm watch:
+
+```
+docker exec -it expense-man-laravel npm run dev
+```
+or
+```
+docker exec -it expense-man-laravel npm run watch
+```
+
+
 Then finally:
 
 ```
