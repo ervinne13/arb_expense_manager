@@ -9,6 +9,6 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'code';
+    protected $primaryKey = 'name';
     public $incrementing = false;
 }

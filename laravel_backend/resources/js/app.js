@@ -2,15 +2,19 @@ import "./bootstrap"
 import Vue from "vue"
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VueDashboard from 'vue-dashboard-vd';
+import 'bulma/css/bulma.min.css'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VeeValidate from 'vee-validate'
 
 import router from '@/js/router'
-// import App from '@/js/pages/App'
-import App from '@/js/layouts/DefaultLayout'
+// import App from '@/js/layouts/DefaultLayout'
+import App from '@/js/layouts/DashboardLayout'
+import { registerDashboardComponents } from '@/js/components/Dashboard/register'
 
+Vue.use(VueDashboard);
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 Vue.use(VeeValidate, {
@@ -35,6 +39,8 @@ Vue.component(
     'passport-personal-access-tokens',
     require('./components/passport/PersonalAccessTokens.vue').default
 );
+
+registerDashboardComponents()
 
 window.onload = function () {
     const app = new Vue({

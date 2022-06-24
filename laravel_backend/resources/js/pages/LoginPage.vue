@@ -30,9 +30,9 @@
 
       <b-button type="submit" variant="primary">Login</b-button>
     </b-form>
-    <b-card class="mt-3" header="Form Data Result">
+    <!-- <b-card class="mt-3" header="Form Data Result">
       <pre class="m-0">{{ user }}</pre>
-    </b-card>
+    </b-card> -->
   </div>
 </template>
 
@@ -40,6 +40,7 @@
 import auth from "../auth.js";
 
 export default {
+  props: ["username"],
   data() {
     return {
       user: {
@@ -49,17 +50,12 @@ export default {
       show: true,
     };
   },
-
   methods: {
     async onSubmit(event) {
       event.preventDefault();
-      const loginResp = await this.axios.post("/api/login", this.user);
-
-      if (loginResp.status === 200) {
-        const user = await auth.getCurrentUser();
-        console.log(user);
-        this.$router.push("/");
-      }
+      await auth.login(this.user.email, this.user.password);
+      // this.$router.push("/");
+      window.location.href = "/";
     },
     onReset(event) {
       event.preventDefault();

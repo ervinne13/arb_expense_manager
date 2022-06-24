@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="this.isUserLoggedIn">
       <b-navbar type="dark" variant="dark">
         <b-navbar-nav>
           <b-nav-item href="#">
@@ -35,14 +35,15 @@ export default {
     };
   },
   async mounted() {
-    this.user = await auth.getCurrentUser();
+    this.user = auth.getCurrentUser();
+    this.isUserLoggedIn = !!this.user;
   },
   methods: {
     login() {
       this.$router.push("/login");
     },
     async logout() {
-      await this.axios.post("/api/logout");
+      auth.logout();
       this.$router.push("/login");
     },
   },

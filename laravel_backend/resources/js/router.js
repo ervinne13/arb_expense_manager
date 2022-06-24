@@ -1,26 +1,27 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import auth from './auth'
-import HomePage from '@/js/pages/HomePage'
+import MyExpenses from '@/js/pages/MyExpenses'
 import UsersPage from '@/js/pages/UsersPage'
-import LoginPage from '@/js/pages/LoginPage'
+import RolesPage from '@/js/pages/RolesPage'
+import LoginPage from '@/js/pages/LoginPage.vue'
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        { path: '/', name: 'home', component: HomePage, meta: { requiresAuth: true } },
-        { path: '/login', name: 'login', component: LoginPage, meta: { hideForAuth: true } },
-        { path: '/users', name: 'users', component: UsersPage, meta: { requiresAuth: true } },
+        { path: '/', component: MyExpenses, meta: { requiresAuth: true } },
+        { path: '/login', component: LoginPage, meta: { hideForAuth: true } },
+        { path: '/users', component: UsersPage, meta: { requiresAuth: true } },
+        { path: '/roles', component: RolesPage, meta: { requiresAuth: true } },
     ]
 });
 
 router.beforeEach(async (to, from, next) => {
-    const user = await auth.getCurrentUser();
+    const user = auth.getCurrentUser();
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (user) {
-            console.log(`${user.name} is logged in`)
             next();
             return;
         } else {
