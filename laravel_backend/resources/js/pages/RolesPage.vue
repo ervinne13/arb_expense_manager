@@ -91,14 +91,13 @@ export default {
       if (this.form.action === "Save") {
         try {
           await axios.post("/api/roles", this.form);
+          await this.refreshRoles();
+          this.$bvModal.hide("modal-role-form");
         } catch (e) {
           if (e.response) {
             this.form.errors = e.response.data.errors;
           }
         }
-
-        await this.refreshRoles();
-        this.$root.$emit("hide::modal", "modal-role-form");
       }
     },
   },
