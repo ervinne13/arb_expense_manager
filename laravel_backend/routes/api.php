@@ -24,6 +24,7 @@ Route::post('logout', [AuthController::class, 'logout']);
 // causing passport to not pick up the token
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('me', [AuthController::class, 'me']);
+    Route::post('me/password', [UsersController::class, 'updatePassword']);
 
     Route::group(['middleware' => 'admin'], function () {
         Route::apiResource('roles', RolesController::class);

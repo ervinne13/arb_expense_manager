@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Security\ChangePasswordRequest;
 use App\Http\Requests\Security\SaveUserRequest;
 use App\Models\User;
 use Exception;
@@ -61,7 +62,7 @@ class UsersController extends Controller
     public function update(SaveUserRequest $request, $id)
     {
         $user = User::find($id);
-        
+
         if ($user->role == 'Administrator' && $request->role != $user->role && User::where('role', '=', 'Administrator')->count() <= 1) {
             return response('At least one administrator must remain', 403);
         }
@@ -70,7 +71,20 @@ class UsersController extends Controller
         $user->email = $request->email;
         $user->role = $request->role;
 
-        // $role->password = Hash::make($request->password);
+        // $user->password = Hash::make($request->password);
+        $user->save();
+        return ["message" => "Saved", "user" => $user];
+    }
+
+    public function updatePassword(ChangePasswordRequest $request)
+    {
+        $user = $request->user();
+        if (!Hash::check($request->current_password, $user->password)) {
+            // TODO: add throttling here later
+            return response('Incorrect password', 403);
+        }
+
+        $user->password = Hash::make($request->password);
         $user->save();
         return ["message" => "Saved", "user" => $user];
     }
