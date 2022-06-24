@@ -18,6 +18,7 @@ export default {
   },
   async mounted() {
     const user = await auth.getCurrentUser();
+    console.log(user);
     this.user = user;
   },
 };

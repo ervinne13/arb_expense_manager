@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Tymon\JWTAuth\Contracts\JWTSubject;
+
+use App\Models\Security\PersonalAccessToken;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,7 +50,7 @@ class User extends Authenticatable
      */
     public function personalAccessToken()
     {
-        return $this->belongsTo('App\Models\Security\PersonalAccessToken', 'id', 'tokenable_id');
+        return $this->belongsTo(PersonalAccessToken::class, 'id', 'tokenable_id');
     }
 
     public function scopeByToken($query, $token)

@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\AppSPAController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,17 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 
 // TODO: make 'middleware' => 'auth:api' work. Currently the Authorization 
 // is not set to ey... but instead the token directly which might be
 // causing passport to not pick up the token
-// Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     Route::get('me', [AuthController::class, 'me']);
-// });
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/{any}', [AppSPAController::class, 'index'])->where('any', '.*');
 });

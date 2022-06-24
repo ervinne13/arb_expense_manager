@@ -54,19 +54,7 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        # TODO: this should be a middleware and we're doing the token searching manually for now.
-        # For some reason, the token is not transformed into ey... jwt format automatically.
-        # Before we update further, let's do it manually for now
-        $cookieName = config('auth_custom.cookie_name');
-        $tokenStr = $request->cookie($cookieName);
-        // $user = User::byToken($tokenStr)->firstOrFail();
-
-        $user = User::whereRelation('personalAccessToken', 'token', $tokenStr)->firstOrFail();
-
-        Log::info($tokenStr);
-        Log::info($user);
-
-        return $user;
+        return $request->user();
     }
 
     public function logout(Request $request)
