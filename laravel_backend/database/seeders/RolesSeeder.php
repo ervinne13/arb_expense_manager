@@ -15,7 +15,7 @@ class RolesSeeder extends Seeder
      */
     public function run()
     {
-        Role::create(['code' => 'admin', 'name' => 'Administrator']);
-        Role::create(['code' => 'user', 'name' => 'User']);
+        Role::create(['description' => 'With access to role, user, and expenses management', 'name' => 'Administrator']);
+        Role::create(['description' => 'Can view expenses', 'name' => 'User']);
     }
 }

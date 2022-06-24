@@ -14,8 +14,8 @@ class AddRoleToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role_code')->after('email_verified_at');
-            $table->foreign('role_code')->references('code')->on('roles');
+            $table->string('role')->after('email_verified_at');
+            $table->foreign('role')->references('name')->on('roles');
         });
     }
 
@@ -26,10 +26,10 @@ class AddRoleToUsersTable extends Migration
      */
     public function down()
     {
-        if (Schema::hasColumn('users', 'role_code')) {
+        if (Schema::hasColumn('users', 'role')) {
             Schema::table('users', function (Blueprint $table) {
-                $table->dropForeign(['role_code']);
-                $table->dropColumn('role_code');
+                $table->dropForeign(['role']);
+                $table->dropColumn('role');
             });
         }
     }

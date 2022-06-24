@@ -9,7 +9,7 @@
       </button>
     </router-link>
 
-    <div v-if="user.role_code == 'admin'">
+    <div v-if="user.role == 'Administrator'">
       <h1>User Management</h1>
       <router-link to="/roles">
         <button class="button is-small is-fullwidth is-rounded is-white margin-btn">

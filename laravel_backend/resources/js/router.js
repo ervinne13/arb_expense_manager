@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import auth from './auth'
 import MyExpenses from '@/js/pages/MyExpenses'
 import UsersPage from '@/js/pages/UsersPage'
+import RolesPage from '@/js/pages/RolesPage'
 import LoginPage from '@/js/pages/LoginPage.vue'
 
 Vue.use(VueRouter);
@@ -13,6 +14,7 @@ const router = new VueRouter({
         { path: '/', component: MyExpenses, meta: { requiresAuth: true } },
         { path: '/login', component: LoginPage, meta: { hideForAuth: true } },
         { path: '/users', component: UsersPage, meta: { requiresAuth: true } },
+        { path: '/roles', component: RolesPage, meta: { requiresAuth: true } },
     ]
 });
 

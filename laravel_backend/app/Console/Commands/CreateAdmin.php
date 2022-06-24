@@ -39,15 +39,15 @@ class CreateAdmin extends Command
      */
     public function handle()
     {
-        $email = $this->ask('Admin Email:');
-        $name = $this->ask('Admin Name:');
-        $pw = $this->ask('Password (Recommended to use strong password generator):');
+        $email = $this->ask('Admin Email');
+        $name = $this->ask('Admin Name');
+        $pw = $this->ask('Password (Recommended to use strong password generator)');
 
         User::create([
             'email' => $email,
             'name' => $name,
             'password' => Hash::make($pw),
-            'role_code' => 'admin' # default, see default roles seeder
+            'role' => 'Administrator' # default, see default roles seeder
         ]);
 
         return 0;
