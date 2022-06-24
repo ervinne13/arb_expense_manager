@@ -8,6 +8,10 @@
           <template #cell(name)="data">
             <b class="text-info" @click="edit(data.item)">{{ data.item.name }}</b>
           </template>
+
+          <template #cell(created_at)="data">
+            {{ displayReadableTS(data) }}
+          </template>
         </b-table>
 
         <b-button @click="create">Add Role</b-button>
@@ -68,6 +72,7 @@
 </style>
 
 <script>
+import moment from "moment";
 const baseForm = {
   name: "",
   description: "",
@@ -96,6 +101,10 @@ export default {
   methods: {
     async refreshRoles() {
       this.roles = (await axios.get("/api/roles")).data;
+    },
+    displayReadableTS(data) {
+      const ts = data.item.created_at;
+      return moment(ts).format("YYYY-MM-DD");
     },
     create() {
       this.form = baseForm;
