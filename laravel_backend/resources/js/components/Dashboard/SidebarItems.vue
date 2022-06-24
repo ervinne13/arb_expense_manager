@@ -27,9 +27,10 @@
           <span>Users</span>
         </button>
       </router-link>
-
+    </div>
+    <div>
       <h1>Expense Management</h1>
-      <router-link to="/expense-categories">
+      <router-link v-if="user.role == 'Administrator'" to="/expense-categories">
         <button class="button is-small is-fullwidth is-rounded is-white margin-btn">
           <span class="icon is-small">
             <i class="mdi mdi-18px mdi-information"></i>

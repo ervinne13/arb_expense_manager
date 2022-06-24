@@ -37,8 +37,6 @@ class SaveUserRequest extends FormRequest
             $rules['password'] = 'required|min:6|confirmed';
         }
 
-        Log::info($rules);
-
         return $rules;
     }
 }
