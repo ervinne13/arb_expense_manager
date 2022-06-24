@@ -30,6 +30,12 @@
 .vd-header-container {
   padding: 0 !important;
 }
+.page-title {
+  font-size: xx-large;
+}
+.page-title-container {
+  margin-bottom: 10px;
+}
 </style>
 
 <script>

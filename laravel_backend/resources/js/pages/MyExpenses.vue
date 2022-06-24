@@ -1,6 +1,10 @@
 <template>
   <div>
-    <h1>My Expenses</h1>
+    <b-row class="page-title-container">
+      <b-col>
+        <h1 class="page-title">My Expenses</h1>
+      </b-col>
+    </b-row>
 
     <b-row>
       <b-col>

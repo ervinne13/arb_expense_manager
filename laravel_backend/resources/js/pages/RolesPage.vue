@@ -1,7 +1,13 @@
 <template>
   <div>
-    <div>
-      <h1>Roles</h1>
+    <div class="container">
+      <b-row class="page-title-container">
+        <b-col>
+          <h1 class="page-title">Roles</h1>
+        </b-col>
+        <!-- There's nothing to link to anyway so let's just hardcode this for now -->
+        <b-col> <p class="text-end">User Management > Roles</p> </b-col>
+      </b-row>
 
       <div>
         <b-table striped hover :items="roles">
