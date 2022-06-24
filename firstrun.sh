@@ -22,6 +22,7 @@ cp nginx/arb-443.conf.tmpl nginx/conf.d/arb-443.conf
 sed -i "s/%NGINX_ALIAS%/$NGINX_ALIAS/g" nginx/conf.d/arb-443.conf
 
 cp laravel_backend/.env.tmpl laravel_backend/.env
+sed -i "s/%NGINX_ALIAS%/$NGINX_ALIAS/g" laravel_backend/.env
 sed -i "s/%DB_IP%/$DB_IP/g" laravel_backend/.env
 sed -i "s/%DB_NAME%/$DB_NAME/g" laravel_backend/.env
 sed -i "s/%DB_USERNAME%/$DB_USERNAME/g" laravel_backend/.env
