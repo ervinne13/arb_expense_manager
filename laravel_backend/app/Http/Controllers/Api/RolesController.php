@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Security\StoreRoleRequest;
 use App\Models\Security\Role;
 use Illuminate\Http\Request;
 
@@ -25,9 +26,13 @@ class RolesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        //
+        $role = new Role();
+        $role->name = $request->name;
+        $role->description = $request->description;
+        $role->save();
+        return ["message" => "Saved", "role" => $role];
     }
 
     /**

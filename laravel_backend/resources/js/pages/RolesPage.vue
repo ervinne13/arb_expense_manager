@@ -14,23 +14,15 @@
       ref="modal"
       v-bind:title="form.title"
       v-bind:ok-title="form.action"
+      @ok="handleAction"
     >
-      <b-form @submit.stop.prevent="onSubmit" @reset="onReset">
-        <!-- <b-button class="mt-3" block @click="$bvModal.hide('modal-form')"
-          >Cancel</b-button
-        >
-        <b-button class="mt-3" block type="submit" variant="primary">{{
-          form.action
-        }}</b-button> -->
-      </b-form>
-
       <b-container>
         <b-row>
           <b-col> Display Name </b-col>
           <b-col sm="8">
             <b-form-group
               label-for="in-role-name"
-              v-bind:description="form.error.name"
+              v-bind:description="form.errors.name[0]"
               class="mb-0 text-danger"
             >
               <b-form-input
@@ -76,20 +68,39 @@ export default {
         name: "",
         title: "Create new Role",
         action: "Save",
-        error: {
-          name: "Role name already taken",
-          description: "",
+        errors: {
+          name: [],
+          description: [],
         },
       },
     };
   },
   async mounted() {
-    const roles = (await axios.get("/api/roles")).data;
-    console.log(roles);
-    this.roles = roles;
+    await this.refreshRoles();
   },
   async onSubmit() {
     console.log(this.form);
+  },
+  methods: {
+    async refreshRoles() {
+      this.roles = (await axios.get("/api/roles")).data;
+    },
+    async handleAction(event) {
+      event.preventDefault();
+
+      if (this.form.action === "Save") {
+        try {
+          await axios.post("/api/roles", this.form);
+        } catch (e) {
+          if (e.response) {
+            this.form.errors = e.response.data.errors;
+          }
+        }
+
+        await this.refreshRoles();
+        this.$root.$emit("hide::modal", "modal-role-form");
+      }
+    },
   },
 };
 </script>
