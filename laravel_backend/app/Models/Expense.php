@@ -27,4 +27,9 @@ class Expense extends Model
     {
         return $query->where('author_id', '=', $id);
     }
+
+    public function scopeCategoryTotals($query)
+    {
+        return $query->groupBy('category')->selectRaw('category, sum(amount_in_cents) as amount_in_cents');
+    }
 }

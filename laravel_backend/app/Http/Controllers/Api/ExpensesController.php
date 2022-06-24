@@ -33,6 +33,18 @@ class ExpensesController extends Controller
         });
     }
 
+    public function getCategoryExpenses(Request $request)
+    {
+        $author = $request->user()->id;
+        return Expense::OwnedBy($author)
+            ->CategoryTotals()
+            ->get()
+            ->map(function ($cat) {
+                $cat['amount'] = $cat['amount_in_cents'] / 100;
+                return $cat;
+            });
+    }
+
     /**
      * Store a newly created resource in storage.
      *

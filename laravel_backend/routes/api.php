@@ -28,11 +28,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('me/password', [UsersController::class, 'updatePassword']);
 
     Route::get('expense-categories', [ExpenseCategoriesController::class, 'index']);
+    Route::get('expenses/by-category', [ExpensesController::class, 'getCategoryExpenses']);
     Route::apiResource('expenses', ExpensesController::class);
 
     Route::group(['middleware' => 'admin'], function () {
         Route::apiResource('users', UsersController::class);
         Route::apiResource('roles', RolesController::class);
-        Route::apiResource('expense-categories', ExpenseCategoriesController::class)->except(['index']);        
+        Route::apiResource('expense-categories', ExpenseCategoriesController::class)->except(['index']);
     });
 });
