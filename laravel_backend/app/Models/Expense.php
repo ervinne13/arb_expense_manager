@@ -22,4 +22,9 @@ class Expense extends Model
     {
         return $this->belongsTo(ExpenseCategory::class, 'category', 'name');
     }
+
+    public function scopeOwnedBy($query, $id)
+    {
+        return $query->where('author_id', '=', $id);
+    }
 }

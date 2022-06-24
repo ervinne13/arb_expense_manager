@@ -6,7 +6,7 @@
           <h1 class="page-title">Expense Categories</h1>
         </b-col>
         <!-- There's nothing to link to anyway so let's just hardcode this for now -->
-        <b-col> <p class="text-end">User Management > Expense Categories</p> </b-col>
+        <b-col> <p class="text-right">User Management > Expense Categories</p> </b-col>
       </b-row>
 
       <div>
