@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Security\SaveUserRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -25,9 +28,15 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveUserRequest $request)
     {
-        //
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role = $request->role;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return ["message" => "Saved", "user" => $user];
     }
 
     /**
@@ -38,7 +47,8 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+        // We don't seem to need this for now
+        throw new Exception("Not yet implemented");
     }
 
     /**
@@ -48,9 +58,21 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SaveUserRequest $request, $id)
     {
-        //
+        $user = User::find($id);
+        
+        if ($user->role == 'Administrator' && $request->role != $user->role && User::where('role', '=', 'Administrator')->count() <= 1) {
+            return response('At least one administrator must remain', 403);
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role = $request->role;
+
+        // $role->password = Hash::make($request->password);
+        $user->save();
+        return ["message" => "Saved", "user" => $user];
     }
 
     /**

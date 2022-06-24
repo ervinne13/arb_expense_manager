@@ -4,6 +4,7 @@ namespace App\Http\Requests\Security;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+// TODO: refactor to save role request later and make it encompass both store and update
 class StoreRoleRequest extends FormRequest
 {
     /**

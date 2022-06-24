@@ -34,7 +34,7 @@
         <b-button size="sm" variant="success" @click="handleAction()">
           {{ form.action }}
         </b-button>
-        <b-button v-if="form.name" left size="sm" variant="danger" @click="remove">
+        <b-button v-if="form.id" left size="sm" variant="danger" @click="remove">
           Delete
         </b-button>
       </template>
@@ -43,14 +43,14 @@
           <b-col> Name </b-col>
           <b-col sm="8">
             <b-form-group
-              label-for="in-user-name"
+              label-for="in-name"
               v-bind:description="form.errors.name[0]"
               class="mb-0 text-danger"
             >
               <b-form-input
-                id="in-user-name"
+                id="in-name"
                 v-model="form.name"
-                placeholder="Auditor/User/etc"
+                placeholder="John Doe"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -60,25 +60,60 @@
           <b-col> Email Address </b-col>
           <b-col sm="8">
             <b-form-group
-              label-for="in-user-name"
+              label-for="in-email"
               v-bind:description="form.errors.email[0]"
               class="mb-0 text-danger"
             >
               <b-form-input
-                id="in-user-name"
-                v-model="form.name"
-                placeholder="Auditor/User/etc"
+                id="in-email"
+                v-model="form.email"
+                placeholder="john.doe@arbcalls.com"
               ></b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
 
         <b-row>
-          <b-col> Description </b-col>
+          <b-col> Role </b-col>
+          <b-col sm="8">
+            <b-form-group
+              label-for="in-role"
+              v-bind:description="form.errors.role[0]"
+              class="mb-0 text-danger"
+            >
+              <b-form-select
+                id="in-role"
+                v-model="form.role"
+                :options="roleNames"
+                required
+              ></b-form-select>
+            </b-form-group>
+          </b-col>
+        </b-row>
+
+        <b-row v-if="form.action == 'Save'">
+          <b-col> Password </b-col>
+          <b-col sm="8">
+            <b-form-group
+              label-for="in-pw"
+              v-bind:description="form.errors.password[0]"
+              class="mb-0 text-danger"
+            >
+              <b-form-input
+                id="in-pw"
+                type="password"
+                v-model="form.password"
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+        </b-row>
+
+        <b-row v-if="form.action == 'Save'">
+          <b-col> Repeat Password </b-col>
           <b-col sm="8">
             <b-form-input
-              v-model="form.description"
-              placeholder="What the role will be used for"
+              type="password"
+              v-model="form.password_confirmation"
             ></b-form-input>
           </b-col>
         </b-row>
@@ -98,21 +133,25 @@
 import moment from "moment";
 const baseForm = {
   name: "",
-  description: "",
+  email: "",
+  role: "",
+  password: "",
+  password_confirmation: "",
   title: "Add User",
   action: "Save",
   errors: {
     name: [],
-    description: [],
+    email: [],
+    role: [],
+    password: [],
   },
 };
 
 export default {
   data() {
     return {
-      roles: [],
+      roleNames: [],
       users: [],
-      currentRole: baseForm,
       form: baseForm,
     };
   },
@@ -121,60 +160,69 @@ export default {
   },
   methods: {
     async refreshData() {
-      this.roles = (await axios.get("/api/roles")).data;
+      this.roleNames = (await axios.get("/api/roles")).data.map((r) => r.name);
       this.users = (await axios.get("/api/users")).data;
+      this.form.role = this.roleNames[0];
     },
     displayReadableTS(data) {
       const ts = data.item.created_at;
       return moment(ts).format("YYYY-MM-DD");
     },
     create() {
-      this.form = baseForm;
+      this.form = { ...baseForm };
       this.$bvModal.show("modal-user-form");
     },
-    edit(role) {
-      this.currentRole = role;
-      console.log(role);
+    edit(user) {
       this.form = {
-        ...role,
-        title: "Update Role",
+        ...user,
+        title: "Update User",
         action: "Update",
-        errors: {
-          name: [],
-          description: [],
-        },
+        errors: baseForm.errors,
       };
 
-      this.$bvModal.show("modal-role-form");
+      this.$bvModal.show("modal-user-form");
     },
     async store() {
       await this.execModificationFn(async () => {
-        await axios.post("/api/roles", this.form);
+        await axios.post("/api/users", this.form);
       });
     },
     async update() {
+      if (this.form.id <= 0) {
+        throw new Error("Cannot update a user without id");
+      }
+
       await this.execModificationFn(async () => {
-        await axios.put(`/api/roles/${this.currentRole.name}`, this.form);
+        await axios.put(`/api/users/${this.form.id}`, this.form);
       });
     },
     async remove() {
       await this.execModificationFn(async () => {
-        await axios.delete(`/api/roles/${this.form.name}`);
+        await axios.delete(`/api/users/${this.form.id}`);
       });
     },
     async execModificationFn(fn) {
       try {
+        this.form.errors = { ...baseForm.errors };
         await fn();
         await this.refreshData();
-        this.$bvModal.hide("modal-role-form");
+        this.$bvModal.hide("modal-user-form");
       } catch (e) {
         if (e.response) {
-          this.form.errors = e.response.data.errors;
+          if (e.response.data && e.response.data.errors) {
+            this.form.errors = {
+              ...baseForm.errors,
+              ...e.response.data.errors,
+            };
+          } else if (e.response.data) {
+            this.form.errors.name = [e.response.data];
+          }
         }
       }
     },
+
     async handleAction(event) {
-      event.preventDefault();
+      event && event.preventDefault();
 
       if (this.form.action === "Save") {
         await this.store();

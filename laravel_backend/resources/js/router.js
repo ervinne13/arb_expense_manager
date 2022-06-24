@@ -22,7 +22,6 @@ router.beforeEach(async (to, from, next) => {
     const user = auth.getCurrentUser();
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (user) {
-            console.log(`${user.name} is logged in`)
             next();
             return;
         } else {

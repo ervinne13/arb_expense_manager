@@ -150,7 +150,10 @@ export default {
       } catch (e) {
         if (e.response) {
           if (e.response.data && e.response.data.errors) {
-            this.form.errors = e.response.data.errors;
+            this.form.errors = {
+              ...baseForm.errors,
+              ...e.response.data.errors,
+            };
           } else if (e.response.data) {
             this.form.errors.name = [e.response.data];
           }

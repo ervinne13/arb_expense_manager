@@ -37,6 +37,24 @@ The commands `composer install`, `npm i`, and `php artisan key:generate` are all
 
 Then you can just access the application via the `NGINX_ALIAS` you set in the browser.
 
+## Passport Creds & User Access
+
+You'll likely need to have passport setup initially and create at least one user. To do this simply just:
+
+```
+docker exec -it expense-man-laravel php artisan passport:install
+```
+
+copy the client id 2 and it's secret, and put it to laravel_backend/.env
+
+Then finally:
+
+```
+docker exec -it expense-man-laravel php artisan arb:new-admin
+```
+
+This will prompt you for the first admin details so you may log in to the system.
+
 ## More Information
 
 You should be good even without reading more, but if you're not familiar with nginx virtual hosting and want to understand wth am I doing here, you can read more information as to why the application is set up this way below. I just personally dislike using exposed ports as I deal with a lot of applications simultaneously, IPs with multiple network bridges feels more future proofed and would cause less conflict when working with multiple projects at once. Plus cookies between different applications are guaranteed to not interfere with each other in case you use the same ports for applications. **Google authentication is not possible with just ports too.** It also opens up the possibility of using local, self-signed ssl, the list of benefit goes on.
