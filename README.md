@@ -66,15 +66,11 @@ This will prompt you for the first admin details so you may log in to the system
 
 TODO: It would be nice if this could be included in the `firstrun.sh`. However, the client id and secret are saved in the database so it's not exactly something ideal to be automated unfortunately. Further research must be done here.
 
-## Setting Up Hot Reloading Local Frontend
+## Running the Application
 
-You may inspect the generated `arb-443.conf` in the nginx folder to see that the js and css assets are directed to the 8079 port. This should be the location of when you do an `npm run watch` to enable hot reloading. So now we open a new terminal tab and execute:
+Check which host you put in your `NGINX_ALIAS` and visit it in the browser. The application should now be running there. Congratulations!
 
-```
-docker exec -it expense-man-laravel npm run watch
-```
-
-You may also execute `npm run dev` instead if you don't need a hot reload.
+===========================================================================
 
 ## After First Setup
 
@@ -84,6 +80,16 @@ Once you've set things up, you only need to run a few things to view the applica
 docker compose up -d
 docker exec -it expense-man-laravel npm run watch
 ```
+
+## Setting Up Hot Reloading Local Frontend
+
+You may inspect the generated `arb-443.conf` in the nginx folder to see that the js and css assets are directed to the 8079 port. This should be the location of when you do an `npm run watch` to enable hot reloading. So now we open a new terminal tab and execute:
+
+```
+docker exec -it expense-man-laravel npm run watch
+```
+
+You may also execute `npm run dev` instead if you don't need a hot reload.
 
 ## More Information
 
