@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import auth from './auth'
-import HomePage from '@/js/pages/HomePage'
 import MyExpenses from '@/js/pages/MyExpenses'
 import UsersPage from '@/js/pages/UsersPage'
 import LoginPage from '@/js/pages/LoginPage.vue'
