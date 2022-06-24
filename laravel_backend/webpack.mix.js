@@ -4,6 +4,9 @@ require('dotenv').config()
 const webpack = require('webpack')
 
 mix.webpackConfig({
+    devServer: {
+        port: '8079'
+    },
     resolve: {
         extensions: ['.js', '.vue'],
         alias: {
