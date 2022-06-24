@@ -57,6 +57,9 @@ class RolesController extends Controller
      */
     public function update(Request $request, $name)
     {
+        if ($name == "Administrator") {
+            return response('The administrator role cannot be updated', 403);
+        }
         $role = Role::find($name);
         $role->name = $request->name;
         $role->description = $request->description;
@@ -72,6 +75,9 @@ class RolesController extends Controller
      */
     public function destroy($name)
     {
+        if ($name == "Administrator") {
+            return response('The administrator role cannot be deleted', 403);
+        }
         $role = Role::destroy($name);
         return ["message" => "Deleted", "role" => $role];
     }

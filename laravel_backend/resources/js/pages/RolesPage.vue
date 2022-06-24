@@ -115,7 +115,6 @@ export default {
     },
     edit(role) {
       this.currentRole = role;
-      console.log(role);
       this.form = {
         ...role,
         title: "Update Role",
@@ -150,12 +149,16 @@ export default {
         this.$bvModal.hide("modal-role-form");
       } catch (e) {
         if (e.response) {
-          this.form.errors = e.response.data.errors;
+          if (e.response.data && e.response.data.errors) {
+            this.form.errors = e.response.data.errors;
+          } else if (e.response.data) {
+            this.form.errors.name = [e.response.data];
+          }
         }
       }
     },
     async handleAction(event) {
-      event.preventDefault();
+      event && event.preventDefault();
 
       if (this.form.action === "Save") {
         await this.store();

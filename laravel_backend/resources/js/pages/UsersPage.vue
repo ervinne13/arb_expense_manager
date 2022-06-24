@@ -40,11 +40,28 @@
       </template>
       <b-container>
         <b-row>
-          <b-col> Display Name </b-col>
+          <b-col> Name </b-col>
           <b-col sm="8">
             <b-form-group
               label-for="in-user-name"
               v-bind:description="form.errors.name[0]"
+              class="mb-0 text-danger"
+            >
+              <b-form-input
+                id="in-user-name"
+                v-model="form.name"
+                placeholder="Auditor/User/etc"
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col> Email Address </b-col>
+          <b-col sm="8">
+            <b-form-group
+              label-for="in-user-name"
+              v-bind:description="form.errors.email[0]"
               class="mb-0 text-danger"
             >
               <b-form-input
@@ -93,16 +110,18 @@ const baseForm = {
 export default {
   data() {
     return {
+      roles: [],
       users: [],
       currentRole: baseForm,
       form: baseForm,
     };
   },
   async mounted() {
-    await this.refreshUsers();
+    await this.refreshData();
   },
   methods: {
-    async refreshUsers() {
+    async refreshData() {
+      this.roles = (await axios.get("/api/roles")).data;
       this.users = (await axios.get("/api/users")).data;
     },
     displayReadableTS(data) {
@@ -111,7 +130,7 @@ export default {
     },
     create() {
       this.form = baseForm;
-      this.$bvModal.show("modal-role-form");
+      this.$bvModal.show("modal-user-form");
     },
     edit(role) {
       this.currentRole = role;
@@ -146,7 +165,7 @@ export default {
     async execModificationFn(fn) {
       try {
         await fn();
-        await this.refreshUsers();
+        await this.refreshData();
         this.$bvModal.hide("modal-role-form");
       } catch (e) {
         if (e.response) {

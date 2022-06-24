@@ -15,8 +15,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-         // TODO: Use yajrabox instead
-         return User::all()->makeHidden(['email_verified_at', 'updated_at']);
+        // TODO: Use yajrabox instead
+        return User::all()->makeHidden(['email_verified_at', 'updated_at']);
     }
 
     /**
@@ -61,6 +61,10 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (User::count() <= 1) {
+            return response('At least one user must remain', 403);
+        }
+        $user = User::destroy($id);
+        return ["message" => "Deleted", "user" => $user];
     }
 }
