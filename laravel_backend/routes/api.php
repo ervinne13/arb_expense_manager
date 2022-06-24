@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RolesController;
+use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\AppSPAController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +27,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['middleware' => 'admin'], function () {
         Route::apiResource('roles', RolesController::class);
+        Route::apiResource('users', UsersController::class);
     });
 });

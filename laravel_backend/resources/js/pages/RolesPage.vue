@@ -93,10 +93,7 @@ const baseForm = {
 export default {
   data() {
     return {
-      roles: [
-        { expense_category: "Cat A", total: "$100.00" },
-        { expense_category: "Cat B", total: "$80.00" },
-      ],
+      roles: [],
       currentRole: baseForm,
       form: baseForm,
     };
