@@ -7,7 +7,7 @@
         id="in-grp-email"
         label="Email address:"
         label-for="in-email"
-        description="If you forgot your Email, please contact an administrator"
+        v-bind:description="loginError"
       >
         <b-form-input
           id="in-email"
@@ -47,15 +47,22 @@ export default {
         email: "",
         password: "",
       },
+      loginError: "",
       show: true,
     };
   },
   methods: {
     async onSubmit(event) {
       event.preventDefault();
-      await auth.login(this.user.email, this.user.password);
-      // this.$router.push("/");
-      window.location.href = "/";
+      try {
+        await auth.login(this.user.email, this.user.password);
+        // this.$router.push("/");
+        window.location.href = "/";
+      } catch (e) {
+        // Let's not put other details
+        this.loginError =
+          "Login failed, please check your credentials or check with your administrator";
+      }
     },
     onReset(event) {
       event.preventDefault();
