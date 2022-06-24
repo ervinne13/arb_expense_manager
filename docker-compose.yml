@@ -43,7 +43,7 @@ services:
     # service. Maybe find a way to replicate one container just with
     # a different command. It's also better that that new service
     # will contain npm run watch directly instead of dev.
-    command: bash -c "php artisan serve --host 0.0.0.0"
+    command: bash -c "npm run dev && php artisan serve --host 0.0.0.0"
     tty: true
     stdin_open: true
     depends_on:

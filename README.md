@@ -37,6 +37,14 @@ The commands `composer install`, `npm i`, and `php artisan key:generate` are all
 
 Then you can just access the application via the `NGINX_ALIAS` you set in the browser.
 
+## Initializing the app
+
+To initialize the app and do a migrate refresh seed, just do:
+
+```
+docker exec -it expense-man-laravel php artisan migrate:refresh --seed
+```
+
 ## Passport Creds & User Access
 
 You'll likely need to have passport setup initially and create at least one user. To do this simply just:
@@ -90,6 +98,10 @@ docker exec -it expense-man-laravel npm run watch
 ```
 
 You may also execute `npm run dev` instead if you don't need a hot reload.
+
+## Resetting The database
+
+The way the mysql container is setup is that even if you do a `docker compose down` the data inside it won't go away. This is because we've set a volume for it so that we can freely do compose downs and up. However, if you updated your credentials in the envs, this wont take effect because of this setup. We can clear the database by including the volumes when we compose down with the command: `docker compose down -v`.
 
 ## More Information
 
