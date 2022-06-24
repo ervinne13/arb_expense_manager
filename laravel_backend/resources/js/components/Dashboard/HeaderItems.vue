@@ -69,6 +69,10 @@
 </template>
 
 <style>
+#modal-chng-pw-form {
+  z-index: 1060;
+}
+
 .navbar {
   background: rgba(158, 158, 158, 0.03);
   padding: 1.5em !important;
