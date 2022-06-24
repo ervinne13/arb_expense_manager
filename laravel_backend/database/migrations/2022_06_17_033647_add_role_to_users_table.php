@@ -15,7 +15,7 @@ class AddRoleToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('role')->after('email_verified_at');
-            $table->foreign('role')->references('name')->on('roles');
+            $table->foreign('role')->references('name')->on('roles')->onDelete('cascade');;
         });
     }
 

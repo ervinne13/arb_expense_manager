@@ -4,9 +4,13 @@
       <h1>Roles</h1>
 
       <div>
-        <b-table striped hover :items="roles"></b-table>
+        <b-table striped hover :items="roles">
+          <template #cell(name)="data">
+            <b class="text-info" @click="edit(data.item)">{{ data.item.name }}</b>
+          </template>
+        </b-table>
 
-        <b-button v-b-modal.modal-role-form>Add Role</b-button>
+        <b-button @click="create">Add Role</b-button>
       </div>
     </div>
     <b-modal
@@ -14,8 +18,16 @@
       ref="modal"
       v-bind:title="form.title"
       v-bind:ok-title="form.action"
-      @ok="handleAction"
     >
+      <template #modal-footer="{ cancel }">
+        <b-button size="sm" @click="cancel()"> Cancel </b-button>
+        <b-button size="sm" variant="success" @click="handleAction()">
+          {{ form.action }}
+        </b-button>
+        <b-button v-if="form.name" left size="sm" variant="danger" @click="remove">
+          Delete
+        </b-button>
+      </template>
       <b-container>
         <b-row>
           <b-col> Display Name </b-col>
@@ -56,6 +68,17 @@
 </style>
 
 <script>
+const baseForm = {
+  name: "",
+  description: "",
+  title: "Add Role",
+  action: "Save",
+  errors: {
+    name: [],
+    description: [],
+  },
+};
+
 export default {
   data() {
     return {
@@ -63,41 +86,69 @@ export default {
         { expense_category: "Cat A", total: "$100.00" },
         { expense_category: "Cat B", total: "$80.00" },
       ],
-      form: {
-        code: "",
-        name: "",
-        title: "Create new Role",
-        action: "Save",
-        errors: {
-          name: [],
-          description: [],
-        },
-      },
+      currentRole: baseForm,
+      form: baseForm,
     };
   },
   async mounted() {
     await this.refreshRoles();
   },
-  async onSubmit() {
-    console.log(this.form);
-  },
   methods: {
     async refreshRoles() {
       this.roles = (await axios.get("/api/roles")).data;
+    },
+    create() {
+      this.form = baseForm;
+      this.$bvModal.show("modal-role-form");
+    },
+    edit(role) {
+      this.currentRole = role;
+      console.log(role);
+      this.form = {
+        ...role,
+        title: "Update Role",
+        action: "Update",
+        errors: {
+          name: [],
+          description: [],
+        },
+      };
+
+      this.$bvModal.show("modal-role-form");
+    },
+    async store() {
+      await this.execModificationFn(async () => {
+        await axios.post("/api/roles", this.form);
+      });
+    },
+    async update() {
+      await this.execModificationFn(async () => {
+        await axios.put(`/api/roles/${this.currentRole.name}`, this.form);
+      });
+    },
+    async remove() {
+      await this.execModificationFn(async () => {
+        await axios.delete(`/api/roles/${this.form.name}`);
+      });
+    },
+    async execModificationFn(fn) {
+      try {
+        await fn();
+        await this.refreshRoles();
+        this.$bvModal.hide("modal-role-form");
+      } catch (e) {
+        if (e.response) {
+          this.form.errors = e.response.data.errors;
+        }
+      }
     },
     async handleAction(event) {
       event.preventDefault();
 
       if (this.form.action === "Save") {
-        try {
-          await axios.post("/api/roles", this.form);
-          await this.refreshRoles();
-          this.$bvModal.hide("modal-role-form");
-        } catch (e) {
-          if (e.response) {
-            this.form.errors = e.response.data.errors;
-          }
-        }
+        await this.store();
+      } else if (this.form.action == "Update") {
+        await this.update();
       }
     },
   },

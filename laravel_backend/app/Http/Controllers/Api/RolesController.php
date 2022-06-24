@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Security\StoreRoleRequest;
 use App\Models\Security\Role;
+use Exception;
 use Illuminate\Http\Request;
 
 class RolesController extends Controller
@@ -38,34 +39,40 @@ class RolesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $name
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($name)
     {
-        //
+        // We don't seem to need this for now
+        throw new Exception("Not yet implemented");
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $name
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $name)
     {
-        //
+        $role = Role::find($name);
+        $role->name = $request->name;
+        $role->description = $request->description;
+        $role->save();
+        return ["message" => "Updated", "role" => $role];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $name
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($name)
     {
-        //
+        $role = Role::destroy($name);
+        return ["message" => "Deleted", "role" => $role];
     }
 }
