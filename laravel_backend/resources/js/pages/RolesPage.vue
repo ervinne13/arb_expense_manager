@@ -6,7 +6,7 @@
           <h1 class="page-title">Roles</h1>
         </b-col>
         <!-- There's nothing to link to anyway so let's just hardcode this for now -->
-        <b-col> <p class="text-end">User Management > Roles</p> </b-col>
+        <b-col> <p class="text-right">User Management > Roles</p> </b-col>
       </b-row>
 
       <div>
@@ -16,7 +16,7 @@
           </template>
 
           <template #cell(created_at)="data">
-            {{ displayReadableTS(data) }}
+            {{ displayReadableTS(data.item.created_at) }}
           </template>
         </b-table>
 
@@ -105,8 +105,7 @@ export default {
     async refreshRoles() {
       this.roles = (await axios.get("/api/roles")).data;
     },
-    displayReadableTS(data) {
-      const ts = data.item.created_at;
+    displayReadableTS(ts) {
       return moment(ts).format("YYYY-MM-DD");
     },
     create() {
@@ -119,10 +118,7 @@ export default {
         ...role,
         title: "Update Role",
         action: "Update",
-        errors: {
-          name: [],
-          description: [],
-        },
+        errors: { ...baseForm.errors },
       };
 
       this.$bvModal.show("modal-role-form");

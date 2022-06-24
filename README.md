@@ -47,6 +47,15 @@ docker exec -it expense-man-laravel php artisan passport:install
 
 copy the client id 2 and it's secret, and put it to laravel_backend/.env
 
+it should look something like:
+
+```
+Client ID: 2
+Client secret: somegibberishhere
+```
+
+Make sure to take Client id 2 or whichever is the password grant client based on the name.
+
 Then finally:
 
 ```

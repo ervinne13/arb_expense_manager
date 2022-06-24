@@ -13,6 +13,8 @@ import router from '@/js/router'
 // import App from '@/js/layouts/DefaultLayout'
 import App from '@/js/layouts/DashboardLayout'
 import { registerDashboardComponents } from '@/js/components/Dashboard/register'
+import { registerChartComponents } from "@/js/charts/register";
+import { registerComponents } from "./components/register";
 
 Vue.use(VueDashboard);
 Vue.use(BootstrapVue)
@@ -40,6 +42,8 @@ Vue.component(
     require('./components/passport/PersonalAccessTokens.vue').default
 );
 
+registerComponents()
+registerChartComponents()
 registerDashboardComponents()
 
 window.onload = function () {

@@ -6,14 +6,14 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-item href="/"> Welcome to Expense Manager </b-nav-item>
-          <b-nav-item v-b-modal.modal-user-form> Change Password </b-nav-item>
+          <b-nav-item v-b-modal.modal-chng-pw-form> Change Password </b-nav-item>
           <b-nav-item @click="logout()"> Logout </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
 
     <b-modal
-      id="modal-user-form"
+      id="modal-chng-pw-form"
       ref="modal"
       title="Change Password"
       ok-title="Change"

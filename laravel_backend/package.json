@@ -26,10 +26,13 @@
     "dependencies": {
         "bootstrap-vue": "^2.22.0",
         "bulma": "^0.9.4",
+        "chart.js": "^2.9.4",
+        "chartjs": "^0.3.24",
         "dotenv": "^10.0.0",
         "moment": "^2.29.3",
         "vee-validate": "^2.2.15",
         "vue-axios": "^2.1.5",
+        "vue-chartjs": "^3.5.1",
         "vue-dashboard-vd": "^2.0.4",
         "vue-router": "^3.5.4"
     },
